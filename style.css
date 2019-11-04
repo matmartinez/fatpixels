@@ -1,0 +1,268 @@
+body {
+	background-color: #161616;/*#1d1d1d;*/
+	background-repeat: repeat-x;
+	background-position: center top;
+	background-image: url(img/Background.jpg);
+	
+	font-family: "Helvetica Neue", sans-serif;
+	font-weight: lighter;
+	
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+.amp {
+	font-family: Baskerville,'Goudy Old Style',Palatino,'Book Antiqua',serif;
+	font-style: italic;
+	font-weight: normal;
+}
+
+em {
+	font-style: italic;
+}
+
+code {
+	font-size: 14px;
+	font-family: "Panic Sans", "Menlo", monospace;
+}
+
+/*
+ *
+ * Header.
+ *
+ */
+header {
+	max-width: 700px;
+	margin: 0 auto;
+	
+	overflow: hidden;
+}
+
+
+header .hero {
+	margin-top: 20px;
+}
+
+header .hero > * {
+	display: block;
+	margin: 0 auto;
+}
+
+header hgroup {
+	display: block;
+	
+	padding-top: 40px;
+	padding-bottom: 40px;
+	
+	text-align: center;
+}
+
+header a.logo,
+header a.logo > * {
+	display: block;
+}
+
+header a.logo > * {
+	display: inline-block;
+}
+
+header h2 {
+	margin-top: 10px;
+	
+	color: #888;
+	text-shadow: 0px 1px 0px #000;
+	
+	color: #fff;
+	text-shadow: 0px 1px 4px #000;
+	
+	font-size: 18px;
+}
+
+header ol.buttons {
+	margin-top: 60px;
+}
+
+header ol.buttons li {
+	display: inline-block;
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+header ol.buttons li a {
+	display: block;
+	width: 190px;
+	height: 60px;
+	
+	margin-bottom: 2px;
+	
+	background-size: 190px 60px;
+}
+
+header ol.buttons li a:active {
+	margin-top: 2px;
+	margin-bottom: 0px;
+}
+
+header ol.buttons a.js {
+	background-image: url(img/Get.png);
+}
+
+header ol.buttons a.fork {
+	background-image: url(img/Fork.png);
+}
+
+@media
+	only screen and (-webkit-min-device-pixel-ratio: 2),
+	only screen and (   min--moz-device-pixel-ratio: 2),
+	only screen and (     -o-min-device-pixel-ratio: 2/1) {
+
+		header ol.buttons a.js {
+background-image: url(img/Get@2x.png);
+		}
+		
+		header ol.buttons a.fork {
+background-image: url(img/Fork@2x.png);
+		}
+}
+
+
+/*
+ *
+ * Snippet.
+ *
+ */
+ 
+section.snippet {
+	max-width: 680px;
+ 	margin: 0 auto;
+ 	
+ 	border-top: 2px dotted #1d1d1d;
+ 	border-bottom: 2px dotted #1d1d1d;
+ 	
+ 	background: repeat-y url(img/Hole.png) left top,
+ 	repeat-y url(img/Hole.png) right top,
+ 	#dbdbdb;
+}
+
+@media
+	only screen and (-webkit-min-device-pixel-ratio: 2),
+	only screen and (   min--moz-device-pixel-ratio: 2),
+	only screen and (     -o-min-device-pixel-ratio: 2/1) {
+		
+		section.snippet {
+background-size: 40px 24px;
+background: repeat-y url(img/Hole@2x.png) left top,
+ repeat-y url(img/Hole@2x.png) right top,
+ #dbdbdb;
+		}
+		
+}
+
+ 
+section.snippet pre {
+	display: block;
+ 	
+ 	padding: 15px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	 
+	margin: 0px;
+	margin-right: 40px;
+	margin-left: 40px;
+	 
+	border-left: 2px dotted #bbbabc;
+	border-right: 2px dotted #bbbabc;
+	 
+	text-shadow: 0px 1px 0px #fff;
+ }
+ 
+ /*
+  *
+  * Reference.
+  *
+  */
+  
+ section.reference {
+	 max-width: 680px;
+	 margin: 0 auto;
+	 
+	 margin-top: 40px;
+	 margin-bottom: 40px;
+	 
+	 color: #a5a5a5;
+	 line-height: 24px;
+ }
+ 
+ section.reference h1 {
+ 	font-size: 24px;
+	color: #fff;
+	
+	margin-bottom: 20px;
+ }
+ 
+ section.reference h1 span {
+	 color: #888;
+ }
+ 
+ section.reference h2 {
+	 color: #fff;
+ }
+ 
+ section.reference ol {
+	 padding-left: 40px;
+	 padding-right: 20px;
+ }
+ 
+ section.reference ol li {
+	 margin-bottom: 10px;
+ }
+ 
+ section.reference b {
+	 color: #fff;
+ }
+ 
+ section.reference em {
+	 color: #666;
+ }
+ 
+ section.reference p {
+	 margin-left: 20px;
+ }
+ 
+ section.reference pre {
+ 	 margin: 0px;
+ 	 margin-right: 20px;
+ 	 margin-left: 20px;
+ }
+ 
+ section.reference a {
+	 color: #fff;
+ }
+ 
+ /*
+  *
+  * Footer.
+  *
+  */
+  
+footer {
+ 	font-size: 14px;
+	text-align: center;
+	color: #666;
+	 
+	padding-top: 40px;
+	padding-bottom: 40px; 
+}
+ 
+footer p {
+	margin-top: 5px;
+}
+ 
+footer .susumi {
+	font-size: 12px;
+ }
+ 
+ footer a {
+	 color: #999;
+	 text-decoration: none;
+ }

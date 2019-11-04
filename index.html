@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>FATPIXELS — JavaScript State-of-the-art pixel art animation and drawing. For the rest of us.</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+		
+		<link rel="stylesheet" type="text/css" href="reset.css">
+		<link rel="stylesheet" type="text/css" href="prism.css">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		
+		<script type="text/javascript" src="prism.min.js"></script>
+		<script type="text/javascript" src="https://rawgithub.com/matmartinez/fatpixels/master/fatpixels.min.js"></script>
+		<script type="text/javascript">
+			var isSmall = navigator.userAgent.match(/(iPhone|iPod)/);
+			
+			document.addEventListener('DOMContentLoaded',function(){
+				var logo = new FatPixels({
+					scale  : isSmall ? 2 : 4,
+					images : ['img/Logo.png'],
+				});
+				
+				logo.drawWithTarget(document.getElementById("logo"));
+				
+				var donkeyKong = new FatPixels({
+					scale  : 4.0,
+					speed  : "16fps",
+					sprite : {
+						url : 'img/DonkeyKong.png',
+						direction: 'y',
+						count : 187,
+					}
+				});
+				
+				donkeyKong.drawWithCanvas(document.getElementById("dk"));
+			})
+		</script>
+	</head>
+	<body>
+		<header>
+			<figure class="hero">
+				<canvas id="dk"></canvas>
+			</figure>
+			
+			<hgroup>
+				<h1><a id="logo" href="/" title="FatPixels"></a></h1>
+				<h2>State-of-the-art pixel art animation <span class="amp">&</span> drawing.</h2>
+				
+				<ol class="buttons">
+					<li><a href="https://github.com/matmartinez/fatpixels" class="fork" title="Fork me on GitHub"></a></li>
+					<li><a href="https://rawgithub.com/matmartinez/fatpixels/master/fatpixels.min.js" class="js" title="Get FatPixels"></a></li>
+				</ol>
+			</hgroup>
+		</header>
+		
+		<section class="snippet">
+			<pre><code class="language-javascript">// Draw your art at any scale. The animation is for free.
+var donkeyKong = new FatPixels({
+	scale  : 4.0,
+	speed  : "16fps",
+	sprite : {
+		url : 'DonkeyKong.png',
+		direction: 'y',
+		count : 187,
+	}
+});
+
+// jQuery is also supported, see below.
+donkeyKong.drawWithTarget(document.getElementById("donkey"));</code></pre>
+		</section>
+		
+		<section class="reference">
+			<h1>Options <span>for creating a FatPixels object.</span></h1>
+			
+			<ol>
+				<li>
+					<h2>scale <em>(Float)</em></h2> 
+					<p>Scaling factor for the rendered bitmaps. <em>Default is 1.0.</em>
+				</li>
+				
+				<li>
+					<h2>autoplay <em>(Boolean)</em></h2>
+					<p>If true, the animation will start immediately after all frames are ready. <em>Default is true.</em></p>
+				</li>
+				
+				<li>
+					<h2>loop <em>(Boolean)</em></h2>
+					<p>If true, the animation will start again over and over and over. <em>Default is true.</em></p>
+				</li>
+				
+				<li>
+					<h2>speed <em>(String or Number)</em></h2>
+					<p>The animation speed. Strings like <em>"69fps"</em>, <em>"200ms"</em> or <em>"1s"</em> are totally cool. Numbers will be interpreted as milliseconds. <em>Default is "15fps".</em></p>
+				</li>
+				
+				<li>
+					<h2>sprite <em>(Dictionary)</em></h2>
+					<p>Include a value for <b>url</b> with the location of your sprite image, the <b>direction</b> of the sprite as <em>"x"</em> or <em>"y"</em>, and the <b>count</b> of frames. See the code for Donkey Kong above and the sprite image <a href="img/DonkeyKong.png">here</a>.</p>
+				</li>
+				
+				<li>
+					<h2>images <em>(Array)</em></h2>
+					<p>Instead of <b>sprite</b> you can specify an URL for each frame.</p>
+				</li>
+				
+				<li>
+					<h2>onAnimation <em>(Function)</em></h2>
+					<p>A callback run every time a frame is animated. Handy, for example, when is needed to pause at a certain frame on the middle of the animation. The frame index is also passed to the function.</p>
+				</li>
+			</ol>
+		</section>
+		
+		<section class="reference">
+			<h1>Methods</h1>
+			<ol>
+				<li>
+					<h2>drawWithTarget <em>(DOMElement <b>target</b>)</em></h2>
+					<p>Draws inside any element. A &lt;canvas&gt; element will be put inside the target.</p>
+				</li>
+				
+				<li>
+					<h2>drawWithCanvas <em>(DOMElement <b>canvas</b>)</em></h2>
+					<p>Draws directly to a &lt;canvas&gt; element on the DOM.</p>
+				</li>
+				
+				<li class="dark">
+					<h2>drawWithHandler <em>(Function <b>handler</b>)</em></h2>
+					<p>Advanced! Use this in the very special case you need to do custom drawing. For example, drawing multiple sprites on a single canvas. The animation is handled for you.</p>
+					
+					<pre><code class="language-javascript">
+myFatPixelsObject.drawWithHandler(function(fatFrame, idx){
+	// Do your custom drawing.
+});
+					</code></pre>
+					<p><em>See the source code for reference on the <b>FatFrame</b> object.</em></p>
+				</li>
+			</ol>
+		</section>
+		
+		<section class="reference">
+			<h1>Playback <span>and frames</span></h1>
+			<ol>
+				<li>
+					<h2>setAnimating <em>(Boolean <b>animating</b>)</em></h2>
+					<p>Resumes or pauses the animation. Access the property with <b>.isAnimating</b>.</p>
+				</li>
+				
+				<li>
+					<h2>setFrame <em>(Integer <b>index</b>)</em></h2>
+					<p>Sets the current frame. Access the property with <b>.frame</b>.</p>
+				</li>
+				
+				<li>
+					<h2>play <em>(), </em> pause <em>() and </em> stop <em>()</em></h2>
+					<p>To quickly use instead of setAnimating.</p>
+				</li>
+			</ol>
+		</section>
+		
+		<section class="reference">
+			<h1>jQuery <span>support</span></h1>
+			<ol>
+				<li class="dark">
+					<p>jQuery is supported but <b>not required</b>. A <b>FatPixels</b> object is returned <em>(breaking the chain, sorry)</em> and the drawing method is called on the matched elements for you.</p>
+					<pre><code class="language-javascript">
+$('figure.huge').FatPixels({
+	scale  : 5,
+	images : [
+		'Marco-1.png',
+		'Marco-2.png',
+		'Marco-3.png'
+	]
+});</code></pre>
+				</li>
+			</ol>
+		</section>
+		
+		<footer>
+			<p>With love by <a href="http://www.matmartinez.net/">Matías Martínez</a>.</p>
+			<p class="susumi">Donkey Kong Country by © Nintendo.</p>
+		</footer>
+	</body>
+</html>
