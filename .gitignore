@@ -1,2 +1,5 @@
 
 .DS_Store
+
+# Staged Pages artifact (docs/ + the library), built by CI
+/_site/

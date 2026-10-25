@@ -35,14 +35,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      # There is no build: the committed files are the site, exactly as the legacy
-      # Pages builder served them. The site root is `docs/`, which is what the legacy
-      # config served (source.path was /docs) — the repo root holds the library itself
-      # (fatpixels.js), which is not part of the site and must stay out of the artifact.
+      # There is no build, but the site is not one directory either. `docs/` is the
+      # page (it is what the legacy config served, source.path was /docs) and the
+      # library it demonstrates lives at the repo root, so the artifact is the two
+      # staged together.
+      #
+      # The demo used to load the library from rawgithub.com, a host that has been
+      # dead for years — and could never come back here, because this repo is private,
+      # so no external raw or CDN URL can serve it. Shipping the library alongside the
+      # page is what makes the demo work at all. Copied rather than committed into
+      # `docs/`, so `fatpixels.min.js` keeps exactly one source of truth.
+      - name: Stage site
+        run: |
+          cp -R docs _site
+          cp fatpixels.min.js _site/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: docs
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
