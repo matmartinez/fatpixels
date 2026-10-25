@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # `contents: read` is LOAD-BEARING here and is the difference from Template A.
+      # A `permissions:` block REPLACES the default token scopes, it does not add to
+      # them. Template A gets away with listing only the two deploy scopes because its
+      # `checkout` lives in the `build` job, which has no block and so inherits the
+      # repo default. Template B has one job doing both, so omitting `contents` resolves
+      # it to `none` and `actions/checkout` fails with "Repository not found" — GitHub
+      # reports an unauthorized read as a missing repo, which sends you hunting for the
+      # wrong bug entirely.
+      contents: read # to check the repo out
+      pages: write # to deploy to Pages
+      id-token: write # to prove the deployment came from this workflow
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # There is no build: the committed files are the site, exactly as the legacy
+      # Pages builder served them. The site root is `docs/`, which is what the legacy
+      # config served (source.path was /docs) — the repo root holds the library itself
+      # (fatpixels.js), which is not part of the site and must stay out of the artifact.
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
