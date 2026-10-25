@@ -11,19 +11,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  # No npm build. `docs/` is the page and the library it demonstrates lives at the repo
+  # root; the site is the two staged together into _site/. (The demo used to load the
+  # library from rawgithub.com, long dead, and this repo is private so no external host
+  # can serve it — shipping it alongside is what makes the demo work.) That _site/ feeds
+  # both targets.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Stage site
+        run: |
+          cp -R docs _site
+          cp fatpixels.min.js _site/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site # unchanged from the Pages-only workflow
+
+      - name: Upload site for Workers
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          include-hidden-files: true
+
+  # Target 1: GitHub Pages — the rollback, unchanged.
+  pages:
+    needs: build
     runs-on: ubuntu-latest
 
     permissions:
-      # `contents: read` is LOAD-BEARING here and is the difference from Template A.
-      # A `permissions:` block REPLACES the default token scopes, it does not add to
-      # them. Template A gets away with listing only the two deploy scopes because its
-      # `checkout` lives in the `build` job, which has no block and so inherits the
-      # repo default. Template B has one job doing both, so omitting `contents` resolves
-      # it to `none` and `actions/checkout` fails with "Repository not found" — GitHub
-      # reports an unauthorized read as a missing repo, which sends you hunting for the
-      # wrong bug entirely.
-      contents: read # to check the repo out
       pages: write # to deploy to Pages
       id-token: write # to prove the deployment came from this workflow
 
@@ -32,29 +53,29 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      # There is no build, but the site is not one directory either. `docs/` is the
-      # page (it is what the legacy config served, source.path was /docs) and the
-      # library it demonstrates lives at the repo root, so the artifact is the two
-      # staged together.
-      #
-      # The demo used to load the library from rawgithub.com, a host that has been
-      # dead for years — and could never come back here, because this repo is private,
-      # so no external raw or CDN URL can serve it. Shipping the library alongside the
-      # page is what makes the demo work at all. Copied rather than committed into
-      # `docs/`, so `fatpixels.min.js` keeps exactly one source of truth.
-      - name: Stage site
-        run: |
-          cp -R docs _site
-          cp fatpixels.min.js _site/
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: _site
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # Target 2: Cloudflare Workers (staging).
+  workers:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7 # for wrangler.jsonc
+
+      # Restore the staged site INTO site/fatpixels/ — Workers matches the full request
+      # path against the assets dir (./site) with no prefix stripping. See wrangler.jsonc.
+      - name: Restore site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site/fatpixels
+
+      - name: Deploy to Cloudflare Workers (staging)
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          wranglerVersion: "4.152.0"
+          command: deploy --env staging

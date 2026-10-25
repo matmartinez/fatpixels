@@ -1,0 +1,28 @@
+{
+  // fatpixels — a sub-site of matias.me, as an assets-only Worker.
+  //
+  // Normal (non-dotfile) config: the Pages job uploads the staged `_site/` dir, not the
+  // repo root, so this file is never in the Pages artifact and never served.
+  "name": "fatpixels",
+  "account_id": "1ac36092396e5feb47ccc986419e0955",
+  "compatibility_date": "2026-10-25",
+  "workers_dev": true,
+
+  // Full request path matched against ./site with no prefix stripping, so /fatpixels/x
+  // is served from site/fatpixels/x. CI restores the staged _site there; git-ignored.
+  "assets": { "directory": "./site" },
+
+  // Cutover target (deploy top-level). CI deploys --env staging only.
+  "routes": [
+    { "pattern": "matias.me/fatpixels", "zone_name": "matias.me" },
+    { "pattern": "matias.me/fatpixels/*", "zone_name": "matias.me" }
+  ],
+  "env": {
+    "staging": {
+      "routes": [
+        { "pattern": "neue.matias.me/fatpixels", "zone_name": "matias.me" },
+        { "pattern": "neue.matias.me/fatpixels/*", "zone_name": "matias.me" }
+      ]
+    }
+  }
+}

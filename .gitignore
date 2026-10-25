@@ -3,3 +3,7 @@
 
 # Staged Pages artifact (docs/ + the library), built by CI
 /_site/
+
+# CI-staged Workers assets dir
+/site/
+/.wrangler/
