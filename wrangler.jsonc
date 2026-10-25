@@ -6,7 +6,7 @@
   "name": "fatpixels",
   "account_id": "1ac36092396e5feb47ccc986419e0955",
   "compatibility_date": "2026-10-25",
-  "workers_dev": true,
+  "workers_dev": false,
 
   // Full request path matched against ./site with no prefix stripping, so /fatpixels/x
   // is served from site/fatpixels/x. CI restores the staged _site there; git-ignored.
