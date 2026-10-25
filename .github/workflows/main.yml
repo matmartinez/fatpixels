@@ -78,4 +78,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           wranglerVersion: "4.152.0"
-          command: deploy --env staging
+          command: deploy
